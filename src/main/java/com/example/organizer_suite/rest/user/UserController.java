@@ -32,15 +32,15 @@ class UserController {
 
 	// Aggregate root
 
-	@GetMapping("/employees")
+	@GetMapping("/users")
 	CollectionModel<EntityModel<User>> all() {
-		List<EntityModel<User>> employees = repository.findAll().stream().map(assembler::toModel)
+		List<EntityModel<User>> users = repository.findAll().stream().map(assembler::toModel)
 				.collect(Collectors.toList());
 
-		return new CollectionModel<>(employees, linkTo(methodOn(UserController.class).all()).withSelfRel());
+		return new CollectionModel<>(users, linkTo(methodOn(UserController.class).all()).withSelfRel());
 	}
 
-	@PostMapping("/employees")
+	@PostMapping("/users")
 	ResponseEntity<?> newUser(@RequestBody User newUser) throws URISyntaxException {
 
 		EntityModel<User> entityModel = assembler.toModel(repository.save(newUser));
@@ -50,14 +50,14 @@ class UserController {
 
 	// Single item
 
-	@GetMapping("/employees/{id}")
+	@GetMapping("/users/{id}")
 	EntityModel<User> one(@PathVariable Long id) {
 		User employee = repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
 		return assembler.toModel(employee);
 	}
 
-	@PutMapping("/employees/{id}")
+	@PutMapping("/users/{id}")
 	ResponseEntity<?> replaceUser(@RequestBody User newUser, @PathVariable Long id)
 			throws URISyntaxException {
 
@@ -75,7 +75,7 @@ class UserController {
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
-	@DeleteMapping("/employees/{id}")
+	@DeleteMapping("/users/{id}")
 	ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		/**
 		 * Es fehlt eine Exception, wenn kein Datensatz gefunden wird. 
