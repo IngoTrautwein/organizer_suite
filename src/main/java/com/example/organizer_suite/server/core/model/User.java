@@ -23,7 +23,7 @@ public class User extends BaseModel {
 		return this.surname;
 	}
 	
-	public void setSurename(String surname) {
+	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 }
