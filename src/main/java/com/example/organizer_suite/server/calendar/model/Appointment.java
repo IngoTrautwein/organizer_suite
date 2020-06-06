@@ -1,5 +1,5 @@
 package com.example.organizer_suite.server.calendar.model;
 
-public class Appointment {
+public class Appointment extends CalendarModel {
 
 }
