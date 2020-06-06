@@ -14,6 +14,10 @@ public abstract class BaseModel implements Serializable {
 	
 	private long id = 0;
 	
+	public BaseModel() {
+		
+	}
+	
 	public void setId(long id) {
 		this.id = id;
 	}

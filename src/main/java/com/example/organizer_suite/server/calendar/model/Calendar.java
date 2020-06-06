@@ -6,6 +6,11 @@ public class Calendar extends CalendarModel {
 
 	private String name = "";
 	
+	public Calendar() {
+		super();
+		this.name = "no calendar name set";
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
