@@ -31,13 +31,13 @@ class UserController {
 	}
 
 	// Aggregate root
-
+	
 	@GetMapping("/users")
 	CollectionModel<EntityModel<User>> all() {
 		List<EntityModel<User>> users = repository.findAll().stream().map(assembler::toModel)
 				.collect(Collectors.toList());
-
-		return new CollectionModel<>(users, linkTo(methodOn(UserController.class).all()).withSelfRel());
+		
+		return CollectionModel.of(users, linkTo(methodOn(UserController.class).all()).withSelfRel());
 	}
 
 	@PostMapping("/users")

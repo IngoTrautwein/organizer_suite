@@ -35,7 +35,7 @@ class EmployeeController {
 		List<EntityModel<Employee>> employees = repository.findAll().stream().map(assembler::toModel)
 				.collect(Collectors.toList());
 
-		return new CollectionModel<>(employees, linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
+		return CollectionModel.of(employees, linkTo(methodOn(EmployeeController.class).all()).withSelfRel());
 	}
 
 	@PostMapping("/employees")
