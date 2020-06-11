@@ -14,6 +14,8 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.organizer_suite.rest.messaging.MessagingRepository;
+import com.example.organizer_suite.server.core.model.Messaging;
 import com.example.organizer_suite.server.core.model.User;
 
 @Service
@@ -22,11 +24,14 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private final UserRepository repository;
 	@Autowired
+	private final MessagingRepository messagingRepository;
+	@Autowired
 	private final UserModelAssembler assembler;
 
-	UserServiceImpl(UserRepository repository, UserModelAssembler assembler) {
+	UserServiceImpl(UserRepository repository, MessagingRepository messagingRepository, UserModelAssembler assembler) {
 		this.repository = repository;
 		this.assembler = assembler;
+		this.messagingRepository = messagingRepository;
 	}
 
 	@Override
@@ -79,7 +84,6 @@ public class UserServiceImpl implements UserService {
 		});
 
 		EntityModel<User> entityModel = assembler.toModel(updatedUser);
-
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
@@ -89,6 +93,15 @@ public class UserServiceImpl implements UserService {
 		 * Es fehlt eine Exception, wenn kein Datensatz gefunden wird. Aktuell wird ein
 		 * Servercode 500 zurückgeliefert
 		 */
+		List<Messaging> messagingSender = messagingRepository.findBySender(id);
+		messagingSender.forEach(messaging -> {
+			messagingRepository.deleteById(messaging.getId());
+		});
+		
+		List<Messaging> messagingRecipient = messagingRepository.findByRecipient(id);
+		messagingRecipient.forEach(messaging -> {
+			messagingRepository.deleteById(messaging.getId());
+		});
 		repository.deleteById(id);
 
 		return ResponseEntity.noContent().build();
