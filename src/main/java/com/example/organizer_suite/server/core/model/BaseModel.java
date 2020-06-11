@@ -3,8 +3,9 @@ package com.example.organizer_suite.server.core.model;
 import java.io.Serializable;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Entity;
+import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
 
@@ -15,15 +16,17 @@ import lombok.Data;
  *
  */
 @Data
-@Entity
+@MappedSuperclass
 public abstract class BaseModel implements Serializable {
 
 	private static final long serialVersionUID = -6943586561036345400L;
 	
-	private @Id @GeneratedValue Long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
 	
 	public BaseModel() {
-		
+		this.id = 0L;
 	}
 	
 	public void setId(long id) {

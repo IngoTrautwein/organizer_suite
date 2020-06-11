@@ -1,8 +1,12 @@
-package com.example.organizer_suite.examples.rest.employee;
+package com.example.organizer_suite.rest;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.example.organizer_suite.rest.user.UserRepository;
+import com.example.organizer_suite.server.core.model.User;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,12 +25,13 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 class LoadDatabase {
-
+/**
 	@Bean
-	CommandLineRunner initDatabase(EmployeeRepository repository) {
+	CommandLineRunner initDatabase(UserRepository repository) {
 		return args -> {
-			log.info("Preloading " + repository.save(new Employee("Bilbo", "Baggins", "burglar")));
-			log.info("Preloading " + repository.save(new Employee("Frodo", "Baggins", "thief")));
+			log.info("Preloading " + repository.save(new User("Bilbo", "Baggins")));
+			log.info("Preloading " + repository.save(new User("Frodo", "Baggins")));
 		};
 	}
+*/
 }

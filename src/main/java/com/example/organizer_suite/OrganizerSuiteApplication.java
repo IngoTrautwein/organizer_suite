@@ -1,7 +1,9 @@
-package com.example.organizer_suite.examples.rest;
+package com.example.organizer_suite;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
 
 /**
  * Sollte (unter Windows) der Port belegt sein, kann durch den Befehl in der Powershell der Prozess identifiziert werden:
@@ -14,9 +16,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  */
 @SpringBootApplication
-public class PayrollApplication {
+//@ComponentScan(basePackageClasses = UserController.class)
+public class OrganizerSuiteApplication {
 
   public static void main(String... args) {
-    SpringApplication.run(PayrollApplication.class, args);
+    SpringApplication.run(OrganizerSuiteApplication.class, args);
   }
 }

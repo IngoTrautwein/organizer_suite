@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -15,14 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.organizer_suite.server.core.model.Messaging;
 
 @RestController
+@RequestMapping(path="/user/{id}/messaging")
 class MessagingController {
 
+	@Autowired
 	private final MessagingRepository repository;
+	@Autowired
 	private final MessagingModelAssembler assembler;
 
 	MessagingController(MessagingRepository repository, MessagingModelAssembler assembler) {
@@ -32,15 +38,23 @@ class MessagingController {
 
 	// Aggregate root
 	
-	@GetMapping("/messagings")
-	CollectionModel<EntityModel<Messaging>> all() {
-		List<EntityModel<Messaging>> messagings = repository.findAll().stream().map(assembler::toModel)
+	@GetMapping("/allSent")
+	CollectionModel<EntityModel<Messaging>> allSent(@PathVariable Long id) {
+		List<EntityModel<Messaging>> messagings = repository.findBySender(id).stream().map(assembler::toModel)
 				.collect(Collectors.toList());
 		
-		return CollectionModel.of(messagings, linkTo(methodOn(MessagingController.class).all()).withSelfRel());
+		return CollectionModel.of(messagings, linkTo(methodOn(MessagingController.class).allSent(id)).withSelfRel());
+	}
+	
+	@GetMapping("/allReceived")
+	CollectionModel<EntityModel<Messaging>> allReceived(@PathVariable Long id) {
+		List<EntityModel<Messaging>> messagings = repository.findByRecipient(id).stream().map(assembler::toModel)
+				.collect(Collectors.toList());
+		
+		return CollectionModel.of(messagings, linkTo(methodOn(MessagingController.class).allReceived(id)).withSelfRel());
 	}
 
-	@PostMapping("/messagings")
+	@PostMapping("/add")
 	ResponseEntity<?> newMessaging(@RequestBody Messaging newMessaging) throws URISyntaxException {
 
 		EntityModel<Messaging> entityModel = assembler.toModel(repository.save(newMessaging));
@@ -50,14 +64,14 @@ class MessagingController {
 
 	// Single item
 
-	@GetMapping("/messagings/{id}")
+	@GetMapping("/{id}")
 	EntityModel<Messaging> one(@PathVariable Long id) {
 		Messaging messaging = repository.findById(id).orElseThrow(() -> new MessagingNotFoundException(id));
 
 		return assembler.toModel(messaging);
 	}
 
-	@PutMapping("/messagings/{id}")
+	@PutMapping("/{id}")
 	ResponseEntity<?> replaceMessaging(@RequestBody Messaging newMessaging, @PathVariable Long id)
 			throws URISyntaxException {
 
@@ -74,7 +88,7 @@ class MessagingController {
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
 	}
 
-	@DeleteMapping("/messagings/{id}")
+	@DeleteMapping("/{id}")
 	ResponseEntity<?> deleteMessaging(@PathVariable Long id) {
 		/**
 		 * Es fehlt eine Exception, wenn kein Datensatz gefunden wird. 
