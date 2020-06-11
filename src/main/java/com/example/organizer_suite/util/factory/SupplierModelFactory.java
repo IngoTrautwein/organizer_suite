@@ -11,7 +11,7 @@ public class SupplierModelFactory {
 	private static final Map<String, Supplier<? extends BaseModel>> registeredSuppliers = new HashMap<>();
 	
 	static {
-		
+		registeredSuppliers.put("user", new UserSupplier());
 	}
 	
 	public static void registerSupplier(String type, Supplier<? extends BaseModel> supplier) {
