@@ -2,6 +2,8 @@ package com.example.organizer_suite.rest.user;
 
 import java.net.URISyntaxException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -24,6 +26,8 @@ class UserController {
 
 	@Autowired
 	private final UserService userService;
+	// Creates logger
+	final Logger logger = LogManager.getLogger();
 
 	UserController(UserService userService) {
 		this.userService = userService;
@@ -32,6 +36,15 @@ class UserController {
 	@GetMapping(path = "/all")
 	@ResponseBody
 	CollectionModel<EntityModel<User>> all() {
+        logger.debug("This is debug message");
+
+        logger.info("This is info message");
+
+        logger.warn("This is warn message");
+
+        logger.fatal("This is fatal message");
+
+        logger.error("This is error message");
 		return userService.getAll();
 	}
 
@@ -65,7 +78,7 @@ class UserController {
 		return userService.replace(newUser, id);
 	}
 
-	@DeleteMapping(path = "{id}")
+	@DeleteMapping(path = "/{id}")
 	@ResponseBody
 	ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		return userService.delete(id);
