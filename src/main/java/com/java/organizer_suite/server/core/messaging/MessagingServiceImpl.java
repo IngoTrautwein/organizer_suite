@@ -17,28 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.java.organizer_suite.server.core.messaging.exceptions.MessagingNotFoundException;
 import com.java.organizer_suite.server.core.model.Messaging;
-import com.java.organizer_suite.server.core.user.UserRepository;
 
 @Service
 public class MessagingServiceImpl implements MessagingService {
 
 	@Autowired
-	private final UserRepository userRepository;
-	@Autowired
 	private final MessagingRepository repository;
 	@Autowired
 	private final MessagingModelAssembler assembler;
-	
-	MessagingServiceImpl(UserRepository userRepository, MessagingRepository repository, MessagingModelAssembler assembler) {
-		this.userRepository = userRepository;
+
+	MessagingServiceImpl(MessagingRepository repository, MessagingModelAssembler assembler) {
 		this.assembler = assembler;
 		this.repository = repository;
-	}
-	
-	@Override
-	public CollectionModel<EntityModel<Messaging>> getAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -60,6 +50,9 @@ public class MessagingServiceImpl implements MessagingService {
 
 		Messaging updatedMessaging = repository.findById(id).map(messaging -> {
 			messaging.setText(newObj.getText());
+			messaging.setCreationDate(newObj.getCreationDate());
+			messaging.setRecipient(newObj.getRecipient());
+			messaging.setSender(newObj.getSender());
 			return repository.save(messaging);
 		}).orElseGet(() -> {
 			newObj.setId(id);
@@ -69,7 +62,6 @@ public class MessagingServiceImpl implements MessagingService {
 		EntityModel<Messaging> entityModel = assembler.toModel(updatedMessaging);
 
 		return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
-	
 	}
 
 	@Override
@@ -78,14 +70,14 @@ public class MessagingServiceImpl implements MessagingService {
 
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	public CollectionModel<EntityModel<Messaging>> getAllSent(@PathVariable Long id) {
 		List<EntityModel<Messaging>> messagings = repository.findBySender(id).stream().map(assembler::toModel)
 				.collect(Collectors.toList());
-		
+
 		return CollectionModel.of(messagings, linkTo(methodOn(MessagingController.class).allSent(id)).withSelfRel());
 	}
-	
+
 	public CollectionModel<EntityModel<Messaging>> getAllReceived(@PathVariable Long id) {
 		List<EntityModel<Messaging>> messagings = repository.findByRecipient(id).stream().map(assembler::toModel)
 				.collect(Collectors.toList());

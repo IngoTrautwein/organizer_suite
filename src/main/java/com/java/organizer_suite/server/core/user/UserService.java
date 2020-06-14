@@ -12,4 +12,5 @@ public interface UserService extends Service<User> {
 
 	CollectionModel<EntityModel<User>> getAllBySurname(String surname);
 
+	CollectionModel<EntityModel<User>> getAll();
 }

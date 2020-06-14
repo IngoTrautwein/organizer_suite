@@ -2,14 +2,11 @@ package com.java.organizer_suite.server;
 
 import java.net.URISyntaxException;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
 public interface Service<T> {
-
-	CollectionModel<EntityModel<T>> getAll();
 
 	ResponseEntity<?> create(T obj) throws URISyntaxException;
 
