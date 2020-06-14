@@ -1,4 +1,4 @@
-package com.java.organizer_suite.server.core.messaging;
+package com.java.organizer_suite.server.core.messaging.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

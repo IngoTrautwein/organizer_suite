@@ -1,4 +1,4 @@
-package com.java.organizer_suite.server.core.user;
+package com.java.organizer_suite.server.core.user.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,4 +15,5 @@ class UserNotFoundAdvice {
   String userNotFoundHandler(UserNotFoundException ex) {
     return ex.getMessage();
   }
+  
 }

@@ -17,9 +17,10 @@ import org.springframework.stereotype.Service;
 import com.java.organizer_suite.server.core.messaging.MessagingRepository;
 import com.java.organizer_suite.server.core.model.Messaging;
 import com.java.organizer_suite.server.core.model.User;
+import com.java.organizer_suite.server.core.user.exceptions.UserNotFoundException;
 
 @Service
-public class UserServiceImpl implements UserService {
+class UserServiceImpl implements UserService {
 
 	@Autowired
 	private final UserRepository repository;

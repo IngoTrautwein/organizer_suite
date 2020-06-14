@@ -1,22 +1,22 @@
-package com.java.organizer_suite.server.core.user;
+package com.java.organizer_suite.server.core.user.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = -1684383016864204435L;
 
-	UserNotFoundException() {
+	public UserNotFoundException() {
         super();
     }
 	
-	UserNotFoundException(Long id) {
+	public UserNotFoundException(Long id) {
 		super("Could not find user " + id);
 	}
 	
-    UserNotFoundException(String message, Throwable cause) {
+	public UserNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 }
